@@ -1,0 +1,8 @@
+>>> path = "/Users/toanelnino/Documents/Visual Studio/Python/playercrawler/demo.json"
+>>> data1 = spark.read.json(path)
+>>> data.show()
+
+////
+>>> df = spark.read.format('org.apache.spark.sql.json').load(path)
+>>> df.show()
+>>> df.filter(df['Goal'] > 400).show()
