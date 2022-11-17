@@ -9,6 +9,7 @@ class CrawlerItem(scrapy.Item):
     Weight = scrapy.Field()
     Birthday = scrapy.Field()
     National = scrapy.Field()
+    Club = scrapy.Field()
     # Salary= scrapy.Field()
     Season = scrapy.Field()
     ClubCount = scrapy.Field()
