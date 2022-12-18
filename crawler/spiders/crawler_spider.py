@@ -3,7 +3,8 @@ from scrapy.selector import Selector
 from crawler.items import CrawlerItem
 import scrapy
 import re
-
+import json
+import time
 
 class CrawlerSpider(Spider):
     name = "crawler"
@@ -11,26 +12,19 @@ class CrawlerSpider(Spider):
     # start_urls = [
     #     "https://fbref.com/en/players/aa/",
     # ]
-
     def start_requests(self):
-        urls = [
-            'https://fbref.com/en/players/dea698d9/Cristiano-Ronaldo',
-            'https://fbref.com/en/players/1f44ac21/Erling-Haaland',
-            'https://fbref.com/en/players/d70ce98e/Lionel-Messi',
-            'https://fbref.com/en/players/99127249/Antony',
-            'https://fbref.com/en/players/e46012d4/Kevin-De-Bruyne',
-            'https://fbref.com/en/players/9c60f681/Ahmad-Aadi',
-            'https://fbref.com/en/players/ad713dff/Jamal-Aabbou',
-            'https://fbref.com/en/players/c2e5d028/Zakariya-Aabbou',
-            'https://fbref.com/en/players/c48b5529/Kim-Aabech',
-            'https://fbref.com/en/players/d7ed844d/Kamilla-Aabel',
-            'https://fbref.com/en/players/bb124176/Mohamed-Abd-El-Aal-Ali',
-            'https://fbref.com/en/players/53ae3842/Nabil-Aankour',
-            'https://fbref.com/en/players/e4b8c9c4/Edward-Aaron',
-        ]
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
-
+        with open("/Users/toanelnino/Documents/20221/Big Data/BTL/Crawler/scrapy_crawl_footballplayer_data/link3.json") as f:
+            objects = json.load(f)
+        # urls = [
+        #     'https://fbref.com/en/players/dea698d9/Cristiano-Ronaldo',
+        # ]
+        # for url in urls:
+        baseURL = 'https://fbref.com'
+        for i in objects:
+            fullURL = baseURL + i['Link']
+            yield scrapy.Request(url= fullURL , callback=self.parse)
+            time.sleep(5)
+        f.close()
     def parse(self, response):
         questions = Selector(response).xpath('//div[@id="wrap"]')
         for question in questions:
@@ -38,6 +32,7 @@ class CrawlerSpider(Spider):
             # player info
             if len(Selector(response).xpath('//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]')) == 0:
                 item['Name'] = Selector(response).xpath('//div[@id="info"]//div[@id="meta"]//div[2]//h1//span/text()').extract_first()
+                # item['Name'] = data[0]
                 infoList = Selector(response).xpath(
                     '//div[@id="info"]//div[@id="meta"]//div[2]//p')
                 for x in range(len(infoList)):
