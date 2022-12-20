@@ -20,75 +20,73 @@ class CrawlerSpider(Spider):
 
     def parse(self, response):
         questions = Selector(response).xpath('//div[@id="wrap"]')
-        print(questions)
-        for question in questions:
-            item = CrawlerItem()
-            # player info
-            if len(Selector(response).xpath('//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]')) == 0:
-                item['Name'] = Selector(response).xpath(
-                    '//div[@id="info"]//div[@id="meta"]//div[2]//h1//span/text()').extract_first()
-                # item['Name'] = data[0]
-                infoList = Selector(response).xpath(
-                    '//div[@id="info"]//div[@id="meta"]//div[2]//p')
-                for x in range(len(infoList)):
-                    pathSpan = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
-                        str(x+1) + ']//span/text()'
-                    pathStrong = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
-                        str(x+1) + ']//strong/text()'
-                    # Heigh
-                    if len(Selector(response).xpath(pathStrong)) > 0:
-                        if Selector(response).xpath(pathStrong).extract_first()[-2:] == 'cm':
-                            item['Heigh'] = Selector(response).xpath(
-                                pathStrong).extract_first()[0:-2]
-                        if Selector(response).xpath(pathStrong).extract_first() == 'National Team:':
-                            patha = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
-                                str(x+1) + ']//a/text()'
-                            item['National'] = Selector(
-                                response).xpath(patha).extract_first()
-                        if Selector(response).xpath(pathStrong).extract_first() == 'Club:':
-                            patha = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
-                                str(x+1) + ']//a/text()'
-                            item['Club'] = Selector(response).xpath(
-                                patha).extract_first()
-                    if len(Selector(response).xpath(pathSpan)) > 0:
-                        if Selector(response).xpath(pathSpan).extract_first()[-2:] == 'cm':
-                            item['Heigh'] = Selector(response).xpath(
-                                pathSpan).extract_first()[0:-2]
-                    # National
+        item = CrawlerItem()
+        # player info
+        if len(Selector(response).xpath('//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]')) == 0:
+            item['Name'] = Selector(response).xpath(
+                '//div[@id="info"]//div[@id="meta"]//div[2]//h1//span/text()').extract_first()
+            # item['Name'] = data[0]
+            infoList = Selector(response).xpath(
+                '//div[@id="info"]//div[@id="meta"]//div[2]//p')
+            for x in range(len(infoList)):
+                pathSpan = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
+                    str(x+1) + ']//span/text()'
+                pathStrong = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
+                    str(x+1) + ']//strong/text()'
+                # Heigh
+                if len(Selector(response).xpath(pathStrong)) > 0:
+                    if Selector(response).xpath(pathStrong).extract_first()[-2:] == 'cm':
+                        item['Heigh'] = Selector(response).xpath(
+                            pathStrong).extract_first()[0:-2]
+                    if Selector(response).xpath(pathStrong).extract_first() == 'National Team:':
+                        patha = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
+                            str(x+1) + ']//a/text()'
+                        item['National'] = Selector(
+                            response).xpath(patha).extract_first()
+                    if Selector(response).xpath(pathStrong).extract_first() == 'Club:':
+                        patha = '//div[@id="info"]//div[@id="meta"]//div[2]//p[' + \
+                            str(x+1) + ']//a/text()'
+                        item['Club'] = Selector(response).xpath(
+                            patha).extract_first()
+                if len(Selector(response).xpath(pathSpan)) > 0:
+                    if Selector(response).xpath(pathSpan).extract_first()[-2:] == 'cm':
+                        item['Heigh'] = Selector(response).xpath(
+                            pathSpan).extract_first()[0:-2]
+                # National
 
-            else:
-                NothumbSelector = Selector(response).xpath(
-                    '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]')
-                item['Name'] = NothumbSelector.xpath(
-                    '//h1/span/text()').extract_first()
-                item['Birthday'] = NothumbSelector.xpath(
-                    '//span[@id="necro-birth"]/text()').extract_first()[5: -5]
-                infoList = Selector(response).xpath(
-                    '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]/p')
-                for x in range(len(infoList)):
-                    pathSpan = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
-                        x+1) + ']//span/text()'
-                    pathStrong = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
-                        x+1) + ']//strong/text()'
-                    # Heigh
-                    if len(Selector(response).xpath(pathStrong)) > 0:
-                        if Selector(response).xpath(pathStrong).extract_first()[-2:] == 'cm':
-                            item['Heigh'] = Selector(response).xpath(
-                                pathStrong).extract_first()[0:-2]
-                        if Selector(response).xpath(pathStrong).extract_first() == 'National Team:':
-                            patha = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
-                                x+1) + ']//a/text()'
-                            item['National'] = Selector(
-                                response).xpath(patha).extract_first()
-                        if Selector(response).xpath(pathStrong).extract_first() == 'Club:':
-                            patha = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
-                                x+1) + ']//a/text()'
-                            item['Club'] = Selector(response).xpath(
-                                patha).extract_first()
-                    if len(Selector(response).xpath(pathSpan)) > 0:
-                        if Selector(response).xpath(pathSpan).extract_first()[-2:] == 'cm':
-                            item['Heigh'] = Selector(response).xpath(
-                                pathSpan).extract_first()[0:-2]
+        else:
+            NothumbSelector = Selector(response).xpath(
+                '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]')
+            item['Name'] = NothumbSelector.xpath(
+                '//h1/span/text()').extract_first()
+            item['Birthday'] = NothumbSelector.xpath(
+                '//span[@id="necro-birth"]/text()').extract_first()[5: -5]
+            infoList = Selector(response).xpath(
+                '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]/p')
+            for x in range(len(infoList)):
+                pathSpan = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
+                    x+1) + ']//span/text()'
+                pathStrong = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
+                    x+1) + ']//strong/text()'
+                # Heigh
+                if len(Selector(response).xpath(pathStrong)) > 0:
+                    if Selector(response).xpath(pathStrong).extract_first()[-2:] == 'cm':
+                        item['Heigh'] = Selector(response).xpath(
+                            pathStrong).extract_first()[0:-2]
+                    if Selector(response).xpath(pathStrong).extract_first() == 'National Team:':
+                        patha = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
+                            x+1) + ']//a/text()'
+                        item['National'] = Selector(
+                            response).xpath(patha).extract_first()
+                    if Selector(response).xpath(pathStrong).extract_first() == 'Club:':
+                        patha = '//div[@id="info"]//div[@id="meta"]//div[@class="nothumb"]//p[' + str(
+                            x+1) + ']//a/text()'
+                        item['Club'] = Selector(response).xpath(
+                            patha).extract_first()
+                if len(Selector(response).xpath(pathSpan)) > 0:
+                    if Selector(response).xpath(pathSpan).extract_first()[-2:] == 'cm':
+                        item['Heigh'] = Selector(response).xpath(
+                            pathSpan).extract_first()[0:-2]
 
             item['ClubCount'] = Selector(response).xpath(
                 '//div[@id="all_stats_standard"]//table/tfoot/tr[1]//td[@data-stat="team"]/text()').extract_first()[0:-5]
