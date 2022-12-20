@@ -20,7 +20,7 @@ class CrawlerSpider(Spider):
 
     def parse(self, response):
         questions = Selector(response).xpath('//div[@id="wrap"]')
-        print(questions)
+        print("ahihi", questions)
         for question in questions:
             item = CrawlerItem()
             # player info
