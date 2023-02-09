@@ -1,9 +1,11 @@
 from scrapy import Spider, Request
 from scrapy.selector import Selector
-from crawler.items import CrawlerItem
 import json
 import time
+import sys, os
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from items import CrawlerItem
 
 class CrawlerSpider(Spider):
     name = "crawler"
